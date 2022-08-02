@@ -6,9 +6,9 @@ namespace Fruits
 {
     public class Fruit : MonoBehaviour
     {
-        [SerializeField] private Material inside;
+        [SerializeField] public Material inside;
 
-        public void Cut(Vector3 point, Vector3 normal)
+        public GameObject Cut(Vector3 point, Vector3 normal)
         {
             var objs = MeshCut.Cut(gameObject, point, normal, inside);
 
@@ -28,14 +28,18 @@ namespace Fruits
                 seconday.AddComponent<Fruit>().inside = inside;
             }
 
-            if (mainVolume > secondaryVolume)
-            {
-                Destroy(seconday.gameObject);
-            }
-            else
-            {
-                Destroy(main.gameObject);
-            }
+            return main;
+
+            // if (mainVolume > secondaryVolume)
+            // {
+            //     Destroy(seconday.gameObject);
+            //     return main;
+            // }
+            // else
+            // {
+            //     Destroy(main.gameObject);
+            //     return seconday;
+            // }
 
             // main.GetComponent<MeshCollider>().sharedMesh = main.GetComponent<MeshFilter>().mesh;
             // main.GetComponent<Rigidbody>().isKinematic = true;

@@ -19,6 +19,7 @@ namespace Fruits.Builder.EdgeTexture
         [SerializeField] private bool showEnds = true;
         [SerializeField] private int skipRaysCount = 0;
         [SerializeField] private int showRaysCount = 1000;
+        [SerializeField] private float maxRayLength = 1;
         [SerializeField] private Bounds bounds = new Bounds(Vector3.zero, Vector3.one);
         [SerializeField] private Texture3D edges;
         
@@ -48,7 +49,7 @@ namespace Fruits.Builder.EdgeTexture
                 }
             }
 
-            if (showRays && edges)
+            if (showRays || edges)
             {
                 int width = edges.width;
                 int height = edges.height;
@@ -66,9 +67,13 @@ namespace Fruits.Builder.EdgeTexture
                     var vec = (new Vector3(f0, f1, f2) - new Vector3(0.5f, 0.5f, 0.5f)) * 2;
                     var pointIndex = i / 6;
                     var point = EdgeTextureUtils.IndexToPoint(pointIndex, bounds, transform.localToWorldMatrix, width, height, depth);
-                    
-                    Gizmos.color = new Color(f0, f1, f2);
-                    Gizmos.DrawLine(point, point + vec);
+
+                    Gizmos.color = Color.HSVToRGB(vec.magnitude / maxRayLength, 1, 1);
+                    if (showRays)
+                    {
+                        Gizmos.DrawLine(point, point + vec);
+                    }
+
                     if (showEnds)
                     {
                         Gizmos.DrawSphere(point + vec, .01f);
